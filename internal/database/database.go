@@ -5,12 +5,18 @@ import (
 	"log"
 	"math/rand"
 	"strings"
+
+	_ "github.com/lib/pq"
 )
 
 var Connection_string string
 
 func OpenDB() *sql.DB {
 	db, err := sql.Open("postgres", Connection_string)
+	if err != nil {
+		log.Println(err.Error())
+	}
+	err = db.Ping()
 	if err != nil {
 		log.Println(err.Error())
 	}

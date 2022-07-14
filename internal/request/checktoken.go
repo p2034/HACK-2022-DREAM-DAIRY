@@ -4,6 +4,8 @@ import (
 	"encoding/json"
 	"net/http"
 
+	_ "github.com/lib/pq"
+
 	"github.com/p2034/HACK-2022-DREAM-DAIRY/internal/database"
 )
 

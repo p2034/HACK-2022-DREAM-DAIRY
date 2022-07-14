@@ -8,9 +8,8 @@ import (
 	"fmt"
 	"math/rand"
 	"regexp"
-	"time"
 
-	"github.com/golang-jwt/jwt"
+	_ "github.com/lib/pq"
 	"golang.org/x/crypto/pbkdf2"
 )
 
@@ -26,7 +25,7 @@ type Password_cache struct {
 
 const (
 	PASSWORD_SALT_LENGTH          = 32
-	PASSWORD_HASH_LENGTH          = 64
+	PASSWORD_HASH_LENGTH          = 32
 	PASSWORD_SALT_CHARS           = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789"
 	PASSWORD_MIN_ITERATIONS_COUNT = 5000
 )
@@ -91,7 +90,7 @@ func Password_verify(db *sql.DB, something string, password string) (bool, int) 
 */
 
 const (
-	TOKEN_SALT_LENGTH = 16
+	TOKEN_SALT_LENGTH = 32
 	TOKEN_SALT_CHARS  = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789"
 )
 
@@ -105,21 +104,13 @@ func remove(s []string, i int) []string {
 }
 
 func Token_gen(db *sql.DB, userid int) string {
-	salt := Random(TOKEN_SALT_LENGTH, []rune(TOKEN_SALT_CHARS))
-
-	token_str, err := jwt.NewWithClaims(jwt.SigningMethodHS256, jwt.MapClaims{
-		"user_id":       userid,
-		"creation_date": float64(time.Now().UnixNano()) / float64(1000),
-	}).SignedString([]byte(salt))
-	if err != nil {
-		return ""
-	}
+	token_str := Random(TOKEN_SALT_LENGTH, []rune(TOKEN_SALT_CHARS))
 
 	// append tokens
 	var tokens tokens_array
 	var tokens_str []byte
 	db.QueryRow(fmt.Sprintf("SELECT tokens FROM users WHERE userid = %d;", userid)).Scan(&tokens_str)
-	err = json.Unmarshal(tokens_str, tokens)
+	err := json.Unmarshal(tokens_str, tokens)
 	if err != nil {
 		return ""
 	}
@@ -128,7 +119,7 @@ func Token_gen(db *sql.DB, userid int) string {
 	if err != nil {
 		return ""
 	}
-	db.Exec(fmt.Sprintf("UPDATE users SET tokens = '%s';"), string(token_str))
+	db.Exec(fmt.Sprintf("UPDATE users SET tokens = '%s';", string(token_str)))
 
 	return token_str
 }
@@ -151,7 +142,7 @@ func Token_delete(db *sql.DB, token string, userid int) {
 	if err != nil {
 		return
 	}
-	db.Exec(fmt.Sprintf("UPDATE users SET tokens = '%s';"), string(tokens_str))
+	db.Exec(fmt.Sprintf("UPDATE users SET tokens = '%s';", string(tokens_str)))
 }
 
 func Token_find(db *sql.DB, token string, userid int) bool {
@@ -171,7 +162,7 @@ func Token_find(db *sql.DB, token string, userid int) bool {
 	if err != nil {
 		return false
 	}
-	db.Exec(fmt.Sprintf("UPDATE users SET tokens = '%s';"), string(tokens_str))
+	db.Exec(fmt.Sprintf("UPDATE users SET tokens = '%s';", string(tokens_str)))
 
 	return false
 }

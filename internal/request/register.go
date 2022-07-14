@@ -5,6 +5,8 @@ import (
 	"fmt"
 	"net/http"
 
+	_ "github.com/lib/pq"
+
 	"github.com/p2034/HACK-2022-DREAM-DAIRY/internal/database"
 )
 
@@ -14,7 +16,7 @@ type register_req struct {
 	Password string `json:"password"`
 }
 
-func RequestRegister(w http.ResponseWriter, r *http.Request) {
+func RegisterRequest(w http.ResponseWriter, r *http.Request) {
 	if r.Method != http.MethodPost {
 		w.WriteHeader(400)
 		return
@@ -35,6 +37,7 @@ func RequestRegister(w http.ResponseWriter, r *http.Request) {
 		"('%s', '%s', '%s', '%s', %d) RETURNING userid;",
 		body.Username, body.Email, cache.Salt, cache.Hash, cache.Iterations)).Scan(&userid)
 	if err != nil {
+		fmt.Println(err.Error())
 		w.WriteHeader(400)
 		return
 	}

@@ -9,3 +9,7 @@ CREATE TABLE users (
 
     tokens json
 );
+
+CREATE TABLE dreams (
+    
+);
