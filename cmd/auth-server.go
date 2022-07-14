@@ -5,11 +5,11 @@ import (
 	"net/http"
 	"os"
 
-	"github.com/p2034/AUTH-SERVER-dream-diary-hack-2022/internal/database"
-	"github.com/p2034/AUTH-SERVER-dream-diary-hack-2022/internal/request"
+	"github.com/p2034/HACK-2022-DREAM-DAIRY/internal/database"
+	"github.com/p2034/HACK-2022-DREAM-DAIRY/internal/request"
 )
 
-func auth_server() {
+func Auth_server() {
 	dbhost := os.Getenv("DATABASE_HOST")
 	dbport := os.Getenv("DATABASE_PORT")
 	dbuser := os.Getenv("DATABASE_USER")

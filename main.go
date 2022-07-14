@@ -1,5 +1,9 @@
 package main
 
+import (
+	"github.com/p2034/HACK-2022-DREAM-DAIRY/cmd"
+)
+
 func main() {
-	cmd.auth_server()
+	cmd.Auth_server()
 }

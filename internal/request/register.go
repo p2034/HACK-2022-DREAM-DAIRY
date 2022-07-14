@@ -5,7 +5,7 @@ import (
 	"fmt"
 	"net/http"
 
-	"github.com/p2034/AUTH-SERVER-dream-diary-hack-2022/internal/database"
+	"github.com/p2034/HACK-2022-DREAM-DAIRY/internal/database"
 )
 
 type register_req struct {
