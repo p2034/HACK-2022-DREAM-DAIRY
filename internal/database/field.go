@@ -66,7 +66,7 @@ func Password_verify(db *sql.DB, something string, password string) (bool, int) 
 	var err error
 	var userid int
 	var cache Password_cache
-	check, _ := regexp.MatchString("^(?=.{1,64}@)[A-Za-z0-9_-]+(\\.[A-Za-z0-9_-]+)*@[^-][A-Za-z0-9-]+(\\.[A-Za-z0-9-]+)*(\\.[A-Za-z]{2,})$", something)
+	check, _ := regexp.MatchString("^(.+)@(.+)$", something)
 	if check {
 		err = db.QueryRow(fmt.Sprintf("SELECT password_hash, password_salt,"+
 			"password_iterations, userid FROM users WHERE email = '%s';",
@@ -77,7 +77,6 @@ func Password_verify(db *sql.DB, something string, password string) (bool, int) 
 			something)).Scan(&cache.Hash, &cache.Salt, &cache.Iterations, &userid)
 	}
 	if err != nil {
-		fmt.Println(err.Error())
 		return false, userid
 	}
 
@@ -111,9 +110,14 @@ func Token_gen(db *sql.DB, userid int) string {
 
 	// append tokens
 	var tokens tokens_array
-	db.QueryRow(fmt.Sprintf("SELECT tokens FROM users WHERE userid = %d;", userid)).Scan(&tokens)
+	var tokens_str []byte
+	db.QueryRow(fmt.Sprintf("SELECT tokens FROM users WHERE userid = %d;", userid)).Scan(&tokens_str)
+	err := json.Unmarshal(tokens_str, &tokens)
+	if err != nil {
+		return ""
+	}
 	tokens.Objects = append(tokens.Objects, string(token_str))
-	tokens_str, err := json.Marshal(tokens)
+	tokens_str, err = json.Marshal(tokens)
 	if err != nil {
 		return ""
 	}
@@ -124,14 +128,20 @@ func Token_gen(db *sql.DB, userid int) string {
 
 func Token_delete(db *sql.DB, token string, userid int) {
 	var tokens tokens_array
-	db.QueryRow(fmt.Sprintf("SELECT tokens FROM users WHERE userid = %d;", userid)).Scan(&tokens)
+	var tokens_str []byte
+	db.QueryRow(fmt.Sprintf("SELECT tokens FROM users WHERE userid = %d;", userid)).Scan(&tokens_str)
+	err := json.Unmarshal(tokens_str, &tokens)
+	if err != nil {
+		return
+	}
 	for i := 0; i < len(tokens.Objects); i++ {
 		if tokens.Objects[i] == token {
 			tokens.Objects = remove(tokens.Objects, i)
+			fmt.Println(tokens.Objects)
 			break
 		}
 	}
-	tokens_str, err := json.Marshal(tokens)
+	tokens_str, err = json.Marshal(tokens)
 	if err != nil {
 		return
 	}
@@ -142,10 +152,11 @@ func Token_find(db *sql.DB, token string, userid int) bool {
 	var tokens tokens_array
 	var tokens_str []byte
 	db.QueryRow(fmt.Sprintf("SELECT tokens FROM users WHERE userid = %d;", userid)).Scan(&tokens_str)
-	err := json.Unmarshal(tokens_str, tokens)
+	err := json.Unmarshal(tokens_str, &tokens)
 	if err != nil {
 		return false
 	}
+	fmt.Println(len(tokens.Objects))
 	for i := 0; i < len(tokens.Objects); i++ {
 		if tokens.Objects[i] == token {
 			return true

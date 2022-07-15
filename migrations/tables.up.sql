@@ -7,10 +7,10 @@ CREATE TABLE users (
     password_salt varchar(32) NOT NULL,
     password_iterations int NOT NULL,
 
-    tokens json DEFAULT '{"objects":[]}',
+    tokens TEXT DEFAULT '{"objects":[]}',
 
-    dreams json DEFAULT '{"objects":[]}',
-    goals json DEFAULT '{"objects":[]}'
+    dreams TEXT DEFAULT '{"objects":[]}',
+    goals TEXT DEFAULT '{"objects":[]}'
 );
 
 CREATE TABLE dreams (
@@ -26,7 +26,7 @@ CREATE TABLE goals (
     title TEXT,
     descrip TEXT,
     enddate TEXT,
-    tasks json DEFAULT '{"objects":[]}'
+    tasks TEXT DEFAULT '{"objects":[]}'
 );
 
 CREATE TABLE tasks (

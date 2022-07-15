@@ -16,7 +16,7 @@ type checktoken_req struct {
 
 func CheckTokenRequest(w http.ResponseWriter, r *http.Request) {
 	// check method
-	if r.Method != http.MethodPost {
+	if r.Method != http.MethodGet {
 		w.WriteHeader(400)
 		return
 	}
