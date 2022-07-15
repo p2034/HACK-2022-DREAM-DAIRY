@@ -6,5 +6,11 @@ psql:
 	-e POSTGRES_PASSWORD=$DATABASE_PASSWORD \
 	-p 5432:5432 -it postgres
 
-build-auth:
-	go build -o bin/auth-server ./auth-server
+build:
+	go build -o bin/server .
+
+start-auth: build
+	./bin/server auth
+
+start-api: build
+	./bin/server api
