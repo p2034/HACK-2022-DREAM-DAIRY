@@ -18,3 +18,9 @@ export DATABASE_USER=user
 export DATABASE_PASSWORD=password
 export DATABASE_NAME=dbname
 ```
+<p>Run this to start server:</p>
+
+```
+go build .
+./HACK-2022-DREAM-DAIRY auth <address>
+```
