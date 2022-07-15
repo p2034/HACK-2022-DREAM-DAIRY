@@ -2,9 +2,9 @@
 
 <h1>You can try my auth api</h1>
 
-- [AUTH API](https://github.com/p2034/HACK-2022-DREAM-DAIRY/blob/main/cmd/auth/AUTH.md)
-
-use address 45.141.103.37:10000
+- Use this for testing, use address 45.141.103.37:10000 with [AUTH SERVER](https://github.com/p2034/HACK-2022-DREAM-DAIRY/blob/main/cmd/auth/AUTH.md)
+  
+- [API SERVER](https://github.com/p2034/HACK-2022-DREAM-DAIRY/blob/main/cmd/api/API.md)
 
 <h2>How to use?</h2>
 
