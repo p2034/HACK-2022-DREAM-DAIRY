@@ -4,6 +4,7 @@ import (
 	"encoding/json"
 	"fmt"
 	"net/http"
+	"regexp"
 
 	_ "github.com/lib/pq"
 
@@ -24,6 +25,12 @@ func RegisterRequest(w http.ResponseWriter, r *http.Request) {
 	var body register_req
 	err := json.NewDecoder(r.Body).Decode(&body)
 	if err != nil {
+		w.WriteHeader(400)
+		return
+	}
+
+	check, _ := regexp.MatchString("^[w.-]+@([w-]+.)+[w-]{2,4}$", body.Email)
+	if !check {
 		w.WriteHeader(400)
 		return
 	}
