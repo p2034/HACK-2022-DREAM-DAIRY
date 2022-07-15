@@ -17,7 +17,12 @@ type register_req struct {
 	Password string `json:"password"`
 }
 
+type register_res struct {
+	Token string `json:"token"`
+}
+
 func RegisterRequest(w http.ResponseWriter, r *http.Request) {
+	var res register_res
 	if r.Method != http.MethodPost {
 		w.WriteHeader(400)
 		return
@@ -49,5 +54,16 @@ func RegisterRequest(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
+	// gen token
+	res.Token = database.Token_gen(db, userid)
+	if res.Token == "" {
+		w.WriteHeader(500)
+		return
+	}
+
+	// send
 	w.WriteHeader(200)
+	w.Header().Set("Content-Type", "application/json")
+	jsonResp, _ := json.Marshal(res)
+	w.Write(jsonResp)
 }

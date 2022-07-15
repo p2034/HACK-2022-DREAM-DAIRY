@@ -6,6 +6,7 @@ Request:
   "username": "Steve",
   "password": "my_password_12345",
   "email": "steve@mail.com",
+  "token": "fdsfdfsdfs9832r314gbt13..."
 }
 ```
 Answer:
