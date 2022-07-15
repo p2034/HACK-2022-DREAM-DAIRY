@@ -66,7 +66,7 @@ func Password_verify(db *sql.DB, something string, password string) (bool, int) 
 	var err error
 	var userid int
 	var cache Password_cache
-	check, _ := regexp.MatchString("^[w.-]+@([w-]+.)+[w-]{2,4}$", something)
+	check, _ := regexp.MatchString("^(?=.{1,64}@)[A-Za-z0-9_-]+(\\.[A-Za-z0-9_-]+)*@[^-][A-Za-z0-9-]+(\\.[A-Za-z0-9-]+)*(\\.[A-Za-z]{2,})$", something)
 	if check {
 		err = db.QueryRow(fmt.Sprintf("SELECT password_hash, password_salt,"+
 			"password_iterations, userid FROM users WHERE email = '%s';",

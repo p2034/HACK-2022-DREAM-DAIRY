@@ -34,7 +34,7 @@ func RegisterRequest(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	check, _ := regexp.MatchString("^[w.-]+@([w-]+.)+[w-]{2,4}$", body.Email)
+	check, _ := regexp.MatchString("^(?=.{1,64}@)[A-Za-z0-9_-]+(\\.[A-Za-z0-9_-]+)*@[^-][A-Za-z0-9-]+(\\.[A-Za-z0-9-]+)*(\\.[A-Za-z]{2,})$", body.Email)
 	if !check {
 		w.WriteHeader(400)
 		return
