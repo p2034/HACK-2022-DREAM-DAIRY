@@ -10,11 +10,10 @@ COPY . /src/app
 RUN go mod download
 RUN go mod vendor
 
-RUN make build
+RUN go build -o bin/application .
 
 FROM alpine:latest as runner
 
 COPY --from=builder /src/app/bin .
-COPY ./migrations ./migrations
 
-ENTRYPOINT [ "./test" ]
+ENTRYPOINT [ "./application" ]

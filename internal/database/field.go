@@ -68,13 +68,16 @@ func Password_verify(db *sql.DB, something string, password string) (bool, int) 
 	var cache Password_cache
 	check, _ := regexp.MatchString("^[w.-]+@([w-]+.)+[w-]{2,4}$", something)
 	if check {
-		err = db.QueryRow(fmt.Sprintf("SELECT password_hash, pasword_salt, password_iterations, userid FROM users WHERE email = '%s';",
+		err = db.QueryRow(fmt.Sprintf("SELECT password_hash, password_salt,"+
+			"password_iterations, userid FROM users WHERE email = '%s';",
 			something)).Scan(&cache.Hash, &cache.Salt, &cache.Iterations, &userid)
 	} else {
-		err = db.QueryRow(fmt.Sprintf("SELECT password_hash, pasword_salt, password_iterations, userid FROM users WHERE username = '%s';",
+		err = db.QueryRow(fmt.Sprintf("SELECT password_hash, password_salt,"+
+			"password_iterations, userid FROM users WHERE username = '%s';",
 			something)).Scan(&cache.Hash, &cache.Salt, &cache.Iterations, &userid)
 	}
 	if err != nil {
+		fmt.Println(err.Error())
 		return false, userid
 	}
 
@@ -95,7 +98,7 @@ const (
 )
 
 type tokens_array struct {
-	Objects []string
+	Objects []string `json:"objects"`
 }
 
 func remove(s []string, i int) []string {
@@ -108,37 +111,27 @@ func Token_gen(db *sql.DB, userid int) string {
 
 	// append tokens
 	var tokens tokens_array
-	var tokens_str []byte
-	db.QueryRow(fmt.Sprintf("SELECT tokens FROM users WHERE userid = %d;", userid)).Scan(&tokens_str)
-	err := json.Unmarshal(tokens_str, tokens)
-	if err != nil {
-		return ""
-	}
+	db.QueryRow(fmt.Sprintf("SELECT tokens FROM users WHERE userid = %d;", userid)).Scan(&tokens)
 	tokens.Objects = append(tokens.Objects, string(token_str))
-	tokens_str, err = json.Marshal(tokens)
+	tokens_str, err := json.Marshal(tokens)
 	if err != nil {
 		return ""
 	}
-	db.Exec(fmt.Sprintf("UPDATE users SET tokens = '%s';", string(token_str)))
+	db.Exec(fmt.Sprintf("UPDATE users SET tokens = '%s';", string(tokens_str)))
 
 	return token_str
 }
 
 func Token_delete(db *sql.DB, token string, userid int) {
 	var tokens tokens_array
-	var tokens_str []byte
-	db.QueryRow(fmt.Sprintf("SELECT tokens FROM users WHERE userid = %d;", userid)).Scan(&tokens_str)
-	err := json.Unmarshal(tokens_str, tokens)
-	if err != nil {
-		return
-	}
+	db.QueryRow(fmt.Sprintf("SELECT tokens FROM users WHERE userid = %d;", userid)).Scan(&tokens)
 	for i := 0; i < len(tokens.Objects); i++ {
 		if tokens.Objects[i] == token {
 			tokens.Objects = remove(tokens.Objects, i)
 			break
 		}
 	}
-	tokens_str, err = json.Marshal(tokens)
+	tokens_str, err := json.Marshal(tokens)
 	if err != nil {
 		return
 	}

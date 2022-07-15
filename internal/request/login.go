@@ -2,6 +2,7 @@ package request
 
 import (
 	"encoding/json"
+	"fmt"
 	"net/http"
 
 	_ "github.com/lib/pq"
@@ -40,6 +41,7 @@ func LoginRequest(w http.ResponseWriter, r *http.Request) {
 	var check bool
 	check, resp.Userid = database.Password_verify(db, body.Something, body.Password)
 	if !check {
+		fmt.Println("password wrong")
 		w.WriteHeader(400)
 		return
 	}
