@@ -320,8 +320,15 @@ Request:
 {
   "userid": 1234,
   "token": "egy4983fbi3564342i78...",
-  "first": 3, // id of the dream in db from 0
-  "last": 4
+  "dreams": [
+    {
+      "title":"...",
+      "description":"...",
+      "photos": [
+        "photourl"
+      ]
+    }
+  ]
 }
 ```
 

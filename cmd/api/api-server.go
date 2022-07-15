@@ -17,6 +17,8 @@ func Server(ip string) {
 	dbpassword := os.Getenv("DATABASE_PASSWORD")
 	dbname := os.Getenv("DATABASE_NAME")
 
+	apirequest.ParseConfig()
+
 	database.Connection_string = fmt.Sprintf("host=%s port=%d user=%s password=%s dbname=%s",
 		dbhost, dbport, dbuser, dbpassword, dbname)
 	fmt.Println("DB on: " + database.Connection_string)

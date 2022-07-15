@@ -9,7 +9,7 @@ import (
 	"github.com/p2034/HACK-2022-DREAM-DAIRY/internal/database"
 )
 
-type checktoken_req struct {
+type Checktoken_req struct {
 	Token  string `json:"token"`
 	Userid int    `json:"userid"`
 }

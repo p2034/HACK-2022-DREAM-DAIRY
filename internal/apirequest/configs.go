@@ -1,24 +1,25 @@
 package apirequest
 
-// import (
-// 	"encoding/json"
-// 	"log"
-// 	"os"
-// )
+import (
+	"encoding/json"
+	"fmt"
+	"io/ioutil"
+	"os"
+)
 
-// type server_config struct {
-// 	Host string `json:"host"`
-// 	Port int    `json:"port"`
-// }
+type server_config struct {
+	Host string `json:"host"`
+	Port int    `json:"port"`
+}
 
-// var auth_config server_config
+var Auth_config server_config
 
-// func parseConfig() {
-// 	jsonFile, err := os.Open("configs/auth_server.json")
-// 	if err != nil {
-// 		log.Println(err)
-// 	}
-// 	defer jsonFile.Close()
-
-// 	json.Unmarshal(jsonfile, &auth_config)
-// }
+func ParseConfig() {
+	jsonFile, err := os.Open("configs/auth_server.json")
+	if err != nil {
+		fmt.Println(err)
+	}
+	defer jsonFile.Close()
+	byteValue, _ := ioutil.ReadAll(jsonFile)
+	json.Unmarshal(byteValue, &Auth_config)
+}
