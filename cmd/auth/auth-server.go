@@ -10,7 +10,7 @@ import (
 	"github.com/p2034/HACK-2022-DREAM-DAIRY/internal/database"
 )
 
-func Server() {
+func Server(ip string) {
 	dbhost := os.Getenv("DATABASE_HOST")
 	dbport, _ := strconv.Atoi(os.Getenv("DATABASE_PORT"))
 	dbuser := os.Getenv("DATABASE_USER")
@@ -27,7 +27,7 @@ func Server() {
 	http.HandleFunc("/logout", authrequest.LogoutRequest)
 	http.HandleFunc("/checktoken", authrequest.CheckTokenRequest)
 
-	host := ":10000"
+	host := ip + ":10000"
 	fmt.Println("Server is listening on host: " + host)
 	http.ListenAndServe(host, nil)
 }

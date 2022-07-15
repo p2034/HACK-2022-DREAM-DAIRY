@@ -9,17 +9,17 @@ import (
 )
 
 func main() {
-	if len(os.Args) < 2 {
+	if len(os.Args) < 3 {
 		fmt.Println("Eror wrong argument count")
 		return
 	}
 
 	whatWeDo := os.Args[1]
 	if whatWeDo == "auth" {
-		auth.Server()
+		auth.Server(os.Args[2])
 	} else if whatWeDo == "api" {
-		api.Server()
+		api.Server(os.Args[2])
 	} else {
-		fmt.Println("Eror wrong argument: auth or api")
+		fmt.Println("Error wrong argument: auth or api")
 	}
 }
