@@ -1,3 +1,7 @@
+<h1>Offtop</h1>
+
+This was my first hackathon. I managed to make only an authentication server, but I liked what I did, so I use these developments in a universal authentication server for my future projects.
+
 <h1>DREAM DAIRY Backend</h1>
 
 <h1>You can try my auth api</h1>
