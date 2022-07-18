@@ -4,9 +4,9 @@ This was my first hackathon. I managed to make only an authentication server, bu
 
 <h1>DREAM DAIRY Backend</h1>
 
-<h1>You can try my auth api</h1>
+<h2>You can try my auth api</h2>
 
-- READY -> [SERVER](https://github.com/p2034/HACK-2022-DREAM-DAIRY/blob/main/cmd/auth/AUTH.md)
+- [SERVER](https://github.com/p2034/HACK-2022-DREAM-DAIRY/blob/main/cmd/auth/AUTH.md)
   
 - [API SERVER](https://github.com/p2034/HACK-2022-DREAM-DAIRY/blob/main/cmd/api/API.md)
 
